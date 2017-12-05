@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+
+export PROVIDER=${PROVIDER:-"{{ LEXICON_PROVIDER }}"}
+export LEXICON_{{ LEXICON_PROVIDER|upper }}_USERNAME={{ LEXICON_USERNAME }}
+export LEXICON_{{ LEXICON_PROVIDER|upper }}_TOKEN={{ LEXICON_TOKEN }}
+{% if LEXICON_DELEGATED is defined %}
+export DELEGATED_TO={{ LEXICON_DELEGATED }}
+{% endif %}
+
+
+deploy_challenge() {
+    local DOMAIN="${1}" TOKEN_FILENAME="${2}" TOKEN_VALUE="${3}"
+    echo "deploy_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
+    lexicon {% if LEXICON_DELEGATED is defined %} --delegated ${DELEGATED_TO} {% endif %} ${PROVIDER} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+    sleep 30
+}
+clean_challenge() {
+    local DOMAIN="${1}" TOKEN_FILENAME="${2}" TOKEN_VALUE="${3}"
+    echo "clean_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
+    lexicon {% if LEXICON_DELEGATED is defined %} --delegated ${DELEGATED_TO} {% endif %} ${PROVIDER} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+}
+deploy_cert() {
+    local DOMAIN="${1}" KEYFILE="${2}" CERTFILE="${3}" FULLCHAINFILE="${4}" CHAINFILE="${5}" TIMESTAMP="${6}"
+    echo "deploy_cert called: ${DOMAIN}, ${KEYFILE}, ${CERTFILE}, ${FULLCHAINFILE}, ${CHAINFILE}"
+
+}
+unchanged_cert() {
+    local DOMAIN="${1}" KEYFILE="${2}" CERTFILE="${3}" FULLCHAINFILE="${4}" CHAINFILE="${5}"
+    echo "unchanged_cert called: ${DOMAIN}, ${KEYFILE}, ${CERTFILE}, ${FULLCHAINFILE}, ${CHAINFILE}"
+}
+invalid_challenge() {
+    local DOMAIN="${1}" RESPONSE="${2}"
+}
+request_failure() {
+    local STATUSCODE="${1}" REASON="${2}" REQTYPE="${3}"
+}
+exit_hook() {
+  :
+}
+HANDLER="$1"; shift
+if [[ "${HANDLER}" =~ ^(deploy_challenge|clean_challenge|deploy_cert|unchanged_cert|invalid_challenge|request_failure|exit_hook)$ ]]; then
+  "$HANDLER" "$@"
+fi

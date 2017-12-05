@@ -1,0 +1,81 @@
+---
+# tasks file for dehydrated-lexicon
+- name: ensure that pip is present
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-pip
+    - openssl
+    - unzip
+  become: true
+
+- name: ensure that boto3 installed for route53 support
+  pip: 
+    name: boto3
+  become: true
+
+- name: ensure that dns-lexicon was presented
+  pip:
+    name: dns-lexicon
+  become: true
+
+- name: ensure that target directory exist
+  file:
+    path: "{{ INSTALLATION_ROOT }}"
+    state: directory
+    mode: 0755
+  become: true
+
+- name: download dehydrated
+  unarchive:
+    src: https://github.com/lukas2511/dehydrated/archive/{{ DEHYDRATED_VERSION }}.zip
+    dest: "{{ INSTALLATION_ROOT }}"
+    creates: "{{ DEHYDRATED_PATH }}-{{ DEHYDRATED_VERSION }}/dehydrated"
+    remote_src: yes
+  notify: dehydrated changed
+
+- name: ensure that liks updated
+  file:
+    src: "{{ DEHYDRATED_PATH }}-{{ DEHYDRATED_VERSION }}"
+    dest: "{{ DEHYDRATED_PATH }}"
+    state: link
+  become: true
+  notify: dehydrated changed
+
+- name: check dehydrated configuration
+  template:
+    src=dehydrated-config.j2
+    dest="{{ DEHYDRATED_PATH }}/config"
+    owner=root
+    group=root
+    mode=0644
+  become: true
+  notify: dehydrated changed
+
+- name: check domain list for dehydrated
+  template:
+    src=dehydrated-domains.txt.j2
+    dest="{{ DEHYDRATED_PATH }}/domains.txt"
+    owner=root
+    group=root
+    mode=0644
+  become: true
+  notify: dehydrated changed
+
+- name: check dehydrated hook
+  template:
+    src=dehydrated-hook.sh.j2
+    dest="{{ DEHYDRATED_PATH }}/hook.sh"
+    owner=root
+    group=root
+    mode=0755
+  become: true
+  notify: dehydrated changed
+
+- name: add dehydrated to crontab
+  cron:
+    name: "renew certificates"
+    special_time: daily
+    state: present
+    job: "{{ DEHYDRATED_PATH }}/dehydrated -c"
