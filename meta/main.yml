@@ -1,8 +1,8 @@
 galaxy_info:
   author: Aliaksandr Kharkevich
   description: >
-    Deploy [`dehydrated`](https://github.com/lukas2511/dehydrated)
-    with [`dns-lexicon`](https://github.com/AnalogJ/lexicon/)
+    Deploy [dehydrated](https://github.com/lukas2511/dehydrated)
+    with [dns-lexicon](https://github.com/AnalogJ/lexicon/)
     for issuing SSL certificates automatically.
     DNS challenge enabled by default.
   company: EPAM Systems, Inc.
@@ -21,17 +21,14 @@ galaxy_info:
   platforms:
   - name: EL
     versions:
-    - all
     - 7
   - name: Ubuntu
     versions:
-    - all
     - xenial 
     - zesty
     - artful
   - name: Debian
     versions:
-    - all
     - stretch
 
   galaxy_tags:
