@@ -1,5 +1,4 @@
 ---
-# tasks file for dehydrated-lexicon
 - name: ensure that pip is present
   package:
     name: "{{ item }}"

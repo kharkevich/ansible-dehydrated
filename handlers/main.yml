@@ -1,5 +1,4 @@
 ---
-# handlers file for dehydrated-lexicon
 - name: register dehydrated
   listen: dehydrated changed
   shell: "{{ DEHYDRATED_PATH }}/dehydrated --register --accept-terms"
