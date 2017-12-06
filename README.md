@@ -119,4 +119,4 @@ CC-BY 4.0
 Author Information
 ------------------
 
-This role was by [Aliaksandr Kharkevich](https://github.com/kharkevich)
+This role was created by [Aliaksandr Kharkevich](https://github.com/kharkevich)
