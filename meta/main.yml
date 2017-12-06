@@ -1,10 +1,7 @@
 galaxy_info:
   author: Aliaksandr Kharkevich
   description: >
-    Deploy [dehydrated](https://github.com/lukas2511/dehydrated)
-    with [dns-lexicon](https://github.com/AnalogJ/lexicon/)
-    for issuing SSL certificates automatically.
-    DNS challenge enabled by default.
+    Deploy dehydrated dns-lexicon for issuing SSL certificates automatically. DNS challenge enabled by default.
   company: EPAM Systems, Inc.
 
   issue_tracker_url: https://github.com/kharkevich/ansible-dehydrated/issues
