@@ -31,7 +31,7 @@ Address for the letsencrypt informational notices (expiration, etc.)
 
 #### LEXICON_PROVIDER
 
-DNS provider for completing DNS challenge. Full list see on `lexicon`(https://github.com/AnalogJ/lexicon/) page.
+DNS provider for completing DNS challenge. Full list see on [lexicon](https://github.com/AnalogJ/lexicon/) page.
 
     LEXICON_PROVIDER: route53
 
