@@ -1,38 +1,122 @@
-Role Name
-=========
+Dehydrated
+==============
 
-A brief description of the role goes here.
+Install and configure `dehydrated` and `dns-lexicon`. Add cron task for certificates renewals.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The role installs on host:
+
+  * python-pip
+  * openssl
+  * unzip
+  * boto3
+  * dns-lexicon
+
+In case of using HTTP chalenge this role required a webserver with correct processing
+`http://<your-domain>/.well-known/acme-challenge/` context path for ACME challenge.
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### Variables (DNS challenge):
+
+#### CONTACT_EMAIL
+
+Address for the letsencrypt informational notices (expiration, etc.)
+
+    CONTACT_EMAIL: replayceme@example.com
+
+#### LEXICON_PROVIDER
+
+DNS provider for completing DNS challenge. Full list see on `lexicon`(https://github.com/AnalogJ/lexicon/) page.
+
+    LEXICON_PROVIDER: route53
+
+#### LEXICON_USERNAME
+
+Username for API access to your DNS provider (if it required)
+
+    LEXICON_USERNAME: APIUSERNAME
+
+#### LEXICON_TOKEN
+
+Token / password for API access to your DNS provider (if it required)
+
+    LEXICON_TOKEN:
+
+#### LEXICON_DELEGATED
+
+Delegated level domain. Route53 example: in case of using mydomain.domain.company.com should be setted to mydomain.domain value.
+
+    LEXICON_DELEGATED: mydomain.domain
+
+#### DOMAIN_LIST
+
+List of domains for certificates issuing. All certificates will be stored to `CERTDIR` directory. Alternate names not supported yet.
+
+    DOMAIN_LIST:
+      - srv1.mydomain.domain.company.com
+      - site2.mydomain.domain.company.com
+
+#### DEHYDRATED_DEPLOY_CHALLENGE
+
+TDB
+
+#### DEHYDRATED_CLEAN_CHALLENGE
+
+TDB
+
+#### DEHYDRATED_DEPLOY_CERT
+
+TDB
+
+#### DEHYDRATED_UNCHANGED_CERT
+
+TDB
+
+#### Additional variables
+
+For more details take look at `defaults/main.yml`
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
+
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    ---
+    - name: test
+      hosts: remote_host
+      become: true
       roles:
-         - { role: username.rolename, x: 42 }
+        - role: ansible-dehydrated
+      vars:
+        LEXICON_USERNAME: SOMEUSERNAME
+        LEXICON_TOKEN: SECRETOKEN
+        LEXICON_DELEGATED: srv.projects.ou
+        DOMAIN_LIST:
+          - example.srv.projects.ou.company.com
+
+
+Testing
+-------
+
+Use [molecule](https://molecule.readthedocs.io/) for testing
+
 
 License
 -------
 
-BSD
+CC-BY 4.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role was by [Aliaksandr Kharkevich](https://github.com/kharkevich)
