@@ -1,12 +1,10 @@
 ---
-# defaults file for dehydrated-lexicon
-
 INSTALLATION_ROOT: /opt
 DEHYDRATED_VERSION: master
 DEHYDRATED_PATH: "{{ INSTALLATION_ROOT }}/dehydrated"
-LEXICON_PROVIDER: route53
-LEXICON_USERNAME: replayceme
-LEXICON_TOKEN: replayceme
+LEXICON_PROVIDER:
+LEXICON_USERNAME:
+LEXICON_TOKEN:
 # in case if you need delegated domain support on AWS
 # LEXICON_DELEGATED:
 
@@ -16,24 +14,19 @@ BASEDIR: ${SCRIPTDIR}
 DOMAINS_TXT: "${BASEDIR}/domains.txt"
 CERTDIR: "${BASEDIR}/certs"
 HOOK: "${BASEDIR}/hook.sh"
-CONTACT_EMAIL: replayceme@example.com
+CONTACT_EMAIL:
 
-DOMAIN_LIST:
-  - replayceme.com
-  - example.com
+DOMAIN_LIST: []
 
 # addidtional actions
-DEHYDRATED_DEPLOY_CHALLENGE:
-  - cp ${FULLCHAINFILE} /etc/pve/local/pveproxy-ssl.pem
-  - cp ${KEYFILE} /etc/pve/local/pveproxy-ssl.key
-  - systemctl restart pveproxy
+DEHYDRATED_DEPLOY_CHALLENGE: []
 
-DEHYDRATED_CLEAN_CHALLENGE:
+DEHYDRATED_CLEAN_CHALLENGE: []
 
-DEHYDRATED_DEPLOY_CERT:
+DEHYDRATED_DEPLOY_CERT: []
 
-DEHYDRATED_UNCHANGED_CERT:
+DEHYDRATED_UNCHANGED_CERT: []
 
-DEHYDRATED_INVALID_CHALLENGE:
+DEHYDRATED_INVALID_CHALLENGE: []
 
-DEHYDRATED_REQUEST_FAILURE:
+DEHYDRATED_REQUEST_FAILURE: []
