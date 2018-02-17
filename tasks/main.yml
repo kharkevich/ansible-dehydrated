@@ -27,6 +27,13 @@
     mode: 0755
   become: true
 
+- name: ensure that WELLKNOWN directory exist
+  file:
+    path: "/var/www/dehydrated"
+    state: directory
+    mode: 0755
+  become: true
+
 - name: download dehydrated
   unarchive:
     src: https://github.com/lukas2511/dehydrated/archive/{{ DEHYDRATED_VERSION }}.zip
