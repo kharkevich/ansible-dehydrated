@@ -1,5 +1,5 @@
 ---
-- name: ensure that pip is present
+- name: ensure that necessary packages wa presented
   package:
     name: "{{ item }}"
     state: present
@@ -7,6 +7,7 @@
     - python-pip
     - openssl
     - unzip
+    - curl
   become: true
 
 - name: ensure that boto3 installed for route53 support
