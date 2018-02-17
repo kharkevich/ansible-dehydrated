@@ -78,6 +78,7 @@
     group=root
     mode=0755
   become: true
+  when: USE_HOOK
   notify: dehydrated changed
 
 - name: add dehydrated to crontab
