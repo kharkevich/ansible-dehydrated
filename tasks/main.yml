@@ -10,14 +10,13 @@
     - curl
   become: true
 
-- name: ensure that boto3 installed for route53 support
-  pip: 
-    name: boto3
-  become: true
-
-- name: ensure that dns-lexicon was presented
+- name: ensure that boto3 and dns-lexicon installed
   pip:
-    name: dns-lexicon
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - boto3
+    - dns-lexicon
   become: true
 
 - name: ensure that target directory exist
@@ -52,31 +51,31 @@
 
 - name: check dehydrated configuration
   template:
-    src=dehydrated-config.j2
-    dest="{{ DEHYDRATED_PATH }}/config"
-    owner=root
-    group=root
-    mode=0644
+    src: dehydrated-config.j2
+    dest: "{{ DEHYDRATED_PATH }}/config"
+    owner: root
+    group: root
+    mode: 0644
   become: true
   notify: dehydrated changed
 
 - name: check domain list for dehydrated
   template:
-    src=dehydrated-domains.txt.j2
-    dest="{{ DEHYDRATED_PATH }}/domains.txt"
-    owner=root
-    group=root
-    mode=0644
+    src: dehydrated-domains.txt.j2
+    dest: "{{ DEHYDRATED_PATH }}/domains.txt"
+    owner: root
+    group: root
+    mode: 0644
   become: true
   notify: dehydrated changed
 
 - name: check dehydrated hook
   template:
-    src=dehydrated-hook.sh.j2
-    dest="{{ DEHYDRATED_PATH }}/hook.sh"
-    owner=root
-    group=root
-    mode=0755
+    src: dehydrated-hook.sh.j2
+    dest: "{{ DEHYDRATED_PATH }}/hook.sh"
+    owner: root
+    group: root
+    mode: 0755
   become: true
   when: USE_HOOK
   notify: dehydrated changed
@@ -87,3 +86,7 @@
     special_time: daily
     state: present
     job: "{{ DEHYDRATED_PATH }}/dehydrated -c"
+
+- name: Generates Diffie-Hellman parameters
+  include_tasks: dhparam.yml
+  when: DHPARAM_GENERATE

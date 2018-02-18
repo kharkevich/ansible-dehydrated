@@ -2,9 +2,9 @@
 - name: register dehydrated
   listen: dehydrated changed
   shell: "{{ DEHYDRATED_PATH }}/dehydrated --register --accept-terms"
-  become: yes 
+  become: yes
 
 - name: generate certificate
   listen: dehydrated changed
   shell: "{{ DEHYDRATED_PATH }}/dehydrated -c"
-  become: yes 
+  become: yes
