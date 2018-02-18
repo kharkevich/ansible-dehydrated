@@ -1,11 +1,11 @@
 ---
 - name: Check if DH param already exists
   stat:
-    path: "{{ dhparam_path }}"
+    path: "{{ DHPARAM_PATH }}"
   register: dhparam_file
   become: true
 
 - name: Generate Diffie-Hellman params
-  command: "openssl dhparam -out {{ dhparam_path }} {{ dhparam_size }}"
+  command: "openssl dhparam -out {{ DHPARAM_PATH }} {{ DHPARAM_SIZE }}"
   when: dhparam_file.stat.exists == False or DHPARAM_GENERATE_FORCE
   become: true
